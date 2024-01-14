@@ -9,7 +9,7 @@ from repository import ClientRepository
 
 HH_REDIRECT_HOST = "localhost"
 HH_REDIRECT_PORT = 1505
-HH_REDIRECT_URI = f"http://{HH_REDIRECT_HOST}:{HH_REDIRECT_PORT}/oauth/hh"
+HH_REDIRECT_URI = f"https://{HH_REDIRECT_HOST}:{HH_REDIRECT_PORT}/oauth/hh"
 
 
 def get_oauth_link(client_id: str) -> str:
@@ -23,7 +23,10 @@ def get_oauth_link(client_id: str) -> str:
 
 def run_server(queue):
     flask_app.config['queue'] = queue
-    flask_app.run(HH_REDIRECT_HOST, HH_REDIRECT_PORT, threaded=False, use_reloader=False)
+    flask_app.run(HH_REDIRECT_HOST, HH_REDIRECT_PORT,
+                  ssl_context=('cert/cert.pem', 'cert/key.pem'),
+                  threaded=False,
+                  use_reloader=False)
 
 
 def authorize(client_id: str) -> str:
